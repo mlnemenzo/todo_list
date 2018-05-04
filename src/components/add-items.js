@@ -14,13 +14,8 @@ class AddItem extends Component {
     handleAddItem(event) {
         event.preventDefault();
         console.log('Item: ', this.state);
-    }
-
-    reset(event) {
-        this.setState({
-            title: "",
-            details: ""
-        })
+        
+        this.props.add(this.state)
     }
 
     render() {
