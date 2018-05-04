@@ -31,11 +31,19 @@ class App extends Component {
         }, 500);
     }
 
+    deleteItems(index) {
+        const listData = this.state.listData.slice();
+
+        listData.splice(index, 1);
+
+        this.setState({ listData });
+    }
+
     render() { 
         return (<div className = "container">
                     <h1 className = "center">To Do List</h1>
                     <AddItem add={this.AddItem.bind(this)}/>
-                    <List data = {this.state.listData}/>
+                    <List data = {this.state.listData} delete = {this.deleteItems.bind(this)}/>
                 </div>
         );
     }
