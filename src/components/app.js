@@ -3,7 +3,11 @@ import React, { Component } from 'react';
 import '../assets/css/app.css';
 import List from './list';
 import AddItem from './add-items';
-import listData from '../helpers/list_data'
+import listData from '../helpers/list_data';
+import axios from 'axios';
+
+const BASE_URL = "http://api.reactprototypes.com";
+const API_KEY = "?key=deadmau5er";
 
 class App extends Component {
 
@@ -19,24 +23,43 @@ class App extends Component {
         this.getListData();
     }
 
-    AddItem(item) {
+    async AddItem(item) {
+        await axios.post((`${BASE_URL}/todos${API_KEY}`), item);
+
+        this.getListData();
+    }
+
+    async getListData() {
+
+        try {
+
+        const response = await axios.get(`${BASE_URL}/todos${API_KEY}`);
+
+        console.log("Data: ", response.data.todos);
+
         this.setState({
-            listData: [...this.state.listData, item]
-        });
+            listData: response.data.todos
+            });
+        } catch(err) {
+            console.log("ERROR: ", err.message);
+        }
+
+        // axios.get(`${BASE_URL}/todos${API_KEY}`).then( resp => {
+        //     console.log("Response: ", resp.data.todos);
+
+        //     this.setState({
+        //         listData: resp.data.todos
+        //     })
+        // })
     }
 
-    getListData() {
-        setTimeout(() => {
-        this.setState({ listData });
-        }, 500);
-    }
+    async deleteItems(id) {
+        await axios.delete(`${BASE_URL}/todos/${id + API_KEY}`);
 
-    deleteItems(index) {
-        const listData = this.state.listData.slice();
+        this.getListData();
 
-        listData.splice(index, 1);
 
-        this.setState({ listData });
+        
     }
 
     render() { 
